@@ -6,8 +6,6 @@ pub mod montgomery;
 pub use crate::montgomery::{
     montgomery_reduction,
     montgomery_multiplication,
-    to_montgomery_form,
-    from_montgomery_form,
     Q,
     R,
     R_SQUARED,

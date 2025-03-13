@@ -38,50 +38,9 @@ pub const Q_INV: i32 = 3327;
 /// This gives the result (A * R^-1) mod Q
 /// -------------------------------------------------------------------
 pub fn montgomery_reduction(a: i32) -> i32 {
-    // Step 1: Calculate m = (a mod R) * Q_INV mod R
-    // Since R = 2^16, (a mod R) is just the lower 16 bits of a
-    // Example
-    // R - 1 = 0xFFFF =                     1111 1111 1111 1111
-    // a = 0xABCDEF12 = 1010 1011 1100 1101 1110 1111 0001 0010
-    // a & (R-1) = 1110 1111 0001 0010 = 0xEF12
-    println!("Q * Q_INV mod R = {}", (Q * Q_INV) & (R - 1)); // Should be R-1 (65535)
-
     let l = ((a & (R - 1)) * Q_INV) & (R - 1); // AM' mod R
-    println!("l = {}", l);
     let result = (a + l * Q) >> 16;
-    println!("result = {}", result);
-
-    // Step 3: Final reduction to ensure result is in [0, Q-1]
     if result >= Q { result - Q } else { result }
-}
-
-/// -------------------------------------------------------------------
-/// CONVERSION TO MONTGOMERY FORM
-/// -------------------------------------------------------------------
-/// In the Montgomery domain, a number a is represented as (a * R) mod Q
-/// To convert a regular number to Montgomery form, we need to compute:
-/// a_mont = (a * R) mod Q
-///
-/// Direct computation requires an expensive modulo operation.
-/// A more efficient approach:
-/// 1. Compute (a * R^2) mod Q
-/// 2. Apply Montgomery reduction to get (a * R^2 * R^-1) mod Q = (a * R) mod Q
-/// -------------------------------------------------------------------
-pub fn to_montgomery_form(a: i32) -> i32 {
-    // Multiply by R^2 mod Q, then apply Montgomery reduction
-    montgomery_reduction(a)
-}
-
-/// -------------------------------------------------------------------
-/// CONVERSION FROM MONTGOMERY FORM
-/// -------------------------------------------------------------------
-/// To convert from Montgomery form back to regular form:
-/// If a_mont = (a * R) mod Q, we need to compute a = (a_mont * R^-1) mod Q
-/// Which is exactly what Montgomery reduction does
-/// -------------------------------------------------------------------
-pub fn from_montgomery_form(a_mont: i32) -> i32 {
-    // Apply Montgomery reduction to get (a_mont * R^-1) mod Q
-    montgomery_reduction(a_mont)
 }
 
 pub fn montgomery_multiplication(a: i32, b: i32) -> i32 {
