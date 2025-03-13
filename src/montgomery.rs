@@ -38,7 +38,7 @@ pub const Q_INV: i32 = 3327;
 /// This gives the result (A * R^-1) mod Q
 /// -------------------------------------------------------------------
 pub fn montgomery_reduction(a: i32) -> i32 {
-    let l = ((a & (R - 1)) * Q_INV) & (R - 1); // AM' mod R
+    let l = ((a & (R - 1)) * Q_INV) & (R - 1);
     let result = (a + l * Q) >> 16;
     if result >= Q { result - Q } else { result }
 }
