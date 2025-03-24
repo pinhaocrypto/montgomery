@@ -38,10 +38,11 @@ use rand::Rng;
 /// This gives the result (A * R^-1) mod Q
 /// -------------------------------------------------------------------
 pub const KYBER_Q: i32 = 3329;
-pub const Q_INV: i32 = -3327; 
+pub const Q_INV: i32 = -3327;
 pub const R: i32 = 1 << 16;
 
-pub fn montgomery_reduce(a: i32) -> i16 {
+#[unsafe(no_mangle)]
+pub extern "C" fn montgomery_reduce(a: i32) -> i16 {
     let a_mod_r = (a as i16) as i32; // truncate to 16-bit == mod R
     // Key insight: wrapping_mul ensures multiplication result is within i32 range
     // because i16 has signed values, multiplication result may exceed i16 range
@@ -51,6 +52,6 @@ pub fn montgomery_reduce(a: i32) -> i16 {
     reduced as i16
 }
 
-pub fn fqmul(a: i16, b: i16) -> i16 {
-    montgomery_reduce((a as i32).wrapping_mul(b as i32))
-}
+// pub fn fqmul(a: i16, b: i16) -> i16 {
+//     montgomery_reduce((a as i32).wrapping_mul(b as i32))
+// }

@@ -5,7 +5,7 @@ pub mod montgomery;
 // This makes them directly available to external users
 pub use crate::montgomery::{
     montgomery_reduce,
-    fqmul,
+    // fqmul,
     KYBER_Q,
     R,
     // R_SQUARED,

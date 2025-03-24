@@ -1,6 +1,6 @@
 use montgo_mul::{
     montgomery_reduce,
-    fqmul,
+    // fqmul,
     KYBER_Q,
     R
 };
